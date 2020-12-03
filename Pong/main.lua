@@ -76,6 +76,38 @@ function love.update(dt)
     end
 
     if gameState == 'play' then
+        if ball:collides(player1) then
+            ball.dx = - ball.dx * 1.03
+            ball.x = player1.x + player1.width
+
+            if ball.dy < 0 then
+                ball.dy = - math.random(10, 150)
+            else
+                ball.dy = math.random(10, 150)
+            end
+        end
+
+        if ball:collides(player2) then
+            ball.dx = - ball.dx * 1.03
+            ball.x = player2.x - ball.width
+
+            if ball.dy < 0 then
+                ball.dy = - math.random(10, 150)
+            else
+                ball.dy = math.random(10, 150)
+            end
+        end
+
+        if ball.y <= 0 then
+            ball.y = 0
+            ball.dy = - ball.dy
+        end
+
+        if ball.y >= VIRTUAL_HEIGHT - ball.width then
+            ball.y = VIRTUAL_HEIGHT - ball.width
+            ball.dy = - ball.dy
+        end
+
         ball:update(dt)
     end
 
