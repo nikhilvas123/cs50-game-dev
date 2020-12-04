@@ -48,7 +48,7 @@ function love.keypressed(key)
         love.event.quit()
     
     elseif key == 'enter' or key == 'return' then
-        if gameState == 'start' then
+        if gameState == 'start' or gameState == 'serve' then
             gameState = 'play'
         else
             gameState = 'start'
@@ -59,23 +59,16 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    if love.keyboard.isDown('w') then
-        player1.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown('s') then
-        player1.dy = PADDLE_SPEED
-    else
-        player1.dy = 0
-    end
 
-    if love.keyboard.isDown('up') then
-        player2.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown('down') then
-        player2.dy = PADDLE_SPEED
-    else 
-        player2.dy = 0
-    end
+    if gameState == 'serve' then
+        ball.dy = math.random(-50, 50)
+        if servingPlayer == 1 then
+            ball.dx = math.random(140, 200)
+        else
+            ball.dx = -math.random(140, 200)
+        end
 
-    if gameState == 'play' then
+    elseif gameState == 'play' then
         if ball:collides(player1) then
             ball.dx = - ball.dx * 1.03
             ball.x = player1.x + player1.width
@@ -112,17 +105,33 @@ function love.update(dt)
             servingPlayer = 1
             player2Score = player2Score + 1
             ball:reset()
-            gameState = 'start'
+            gameState = 'serve'
         end
 
         if ball.x > VIRTUAL_WIDTH then
             servingPlayer = 2
             player1Score = player1Score + 1
             ball:reset()
-            gameState = 'start'
+            gameState = 'serve'
         end
         
         ball:update(dt)
+    end
+    
+    if love.keyboard.isDown('w') then
+        player1.dy = -PADDLE_SPEED
+    elseif love.keyboard.isDown('s') then
+        player1.dy = PADDLE_SPEED
+    else
+        player1.dy = 0
+    end
+
+    if love.keyboard.isDown('up') then
+        player2.dy = -PADDLE_SPEED
+    elseif love.keyboard.isDown('down') then
+        player2.dy = PADDLE_SPEED
+    else 
+        player2.dy = 0
     end
 
     player1:update(dt)
@@ -138,19 +147,27 @@ function love.draw()
     
     if gameState == 'start' then
         love.graphics.printf(
-            'Hello Start State!',
+            'Press Enter to play',
             0,
             20,
             VIRTUAL_WIDTH,
             'center')
-    else
+    elseif gameState == 'serve' then
         love.graphics.printf(
-            'Hello Play State',
+            'Player ' .. tostring(servingPlayer) .. ' to serve',
             0,
             20,
+            VIRTUAL_WIDTH,
+            'center')
+
+        love.graphics.printf(
+            'Press Enter to serve',
+            0,
+            30,
             VIRTUAL_WIDTH,
             'center')
     end
+
 
     love.graphics.setFont(scoreFont)
     love.graphics.print(
