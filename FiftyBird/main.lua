@@ -9,6 +9,7 @@ require 'StateMachine'
 require 'states/BaseState'
 require 'states/PlayState'
 require 'states/TitleScreenState'
+require 'states/ScoreState'
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -27,8 +28,6 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 local GROUND_LOOPING_POINT = 514
-
-local scrolling = true
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -53,6 +52,7 @@ function love.load()
     gStateMachine = StateMachine {
         ['title'] = function() return TitleScreenState() end,
         ['play'] = function() return PlayState() end,
+        ['score'] = function() return ScoreState() end
     }
 
     gStateMachine:change('title')
