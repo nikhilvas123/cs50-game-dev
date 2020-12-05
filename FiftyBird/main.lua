@@ -47,6 +47,14 @@ end
 function love.update(dt)
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+
+    if love.keyboard.isDown('space') then
+        bird:jump(dt) 
+    end
+
+
+    bird:update(dt)
+    
 end
 
 function love.draw()
