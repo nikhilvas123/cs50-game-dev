@@ -20,9 +20,9 @@ end
 function Bird:update(dt)
     self.dy = self.dy + GRAVITY * dt
     
-    self.y = self.y + self.dy
-end
+    if love.keyboard.wasPressed('space') then
+        self.dy = -5
+    end
 
-function Bird:jump(dt)
-    self.dy = self.dy - 60 * dt
+    self.y = self.y + self.dy
 end
